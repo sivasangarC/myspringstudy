@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "https://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- JDBC driver class — tells Hibernate to use PostgreSQL driver for DB connection -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+
+        <!-- JDBC URL — points to the PostgreSQL database named 'courseman' running on localhost -->
+        <property name="hibernate.connection.url">
+            jdbc:postgresql://localhost:5432/courseman
+        </property>
+
+        <!-- DB credentials — username and password to authenticate with PostgreSQL -->
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">Siva@143</property>
+
+        <!-- Dialect — tells Hibernate which SQL syntax to generate (PostgreSQL-specific SQL) -->
+        <property name="hibernate.dialect">
+            org.hibernate.dialect.PostgreSQLDialect
+        </property>
+
+        <!-- hbm2ddl.auto=create — drops and recreates all tables every time the app starts -->
+        <property name="hibernate.hbm2ddl.auto">create</property>
+
+        <!-- show_sql=true — prints every SQL query Hibernate runs to the console -->
+        <property name="hibernate.show_sql">true</property>
+
+    </session-factory>
+</hibernate-configuration>
