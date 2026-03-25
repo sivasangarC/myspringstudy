@@ -5,6 +5,7 @@ It covers everything from basic DSA and core Java all the way to Spring Boot, Hi
 Each folder is a separate project — some are just plain Java files, some are full Maven projects.
 
 ---
+D:\c++ codeing'\python\intelijji project study\projects.html
 
 ## What's Inside
 
@@ -515,5 +516,6 @@ If you just want to quickly run something, here's the one-liner for each project
 | SpringAI | `mvn spring-boot:run` |
 | SpringEcomAI | `docker-compose up -d` then `mvn spring-boot:run` |
 | Ecom Frontend | `npm install && npm run dev` |
-#   m y s p r i n g s t u d y  
+#   m y s p r i n g s t u d y 
+ 
  
