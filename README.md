@@ -1,521 +1,368 @@
-# My Java Learning Projects
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Java Learning Projects</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --card: #1e2130;
+    --border: #2a2d3e;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --text: #e2e8f0;
+    --muted: #8892a4;
+    --tag-bg: #252840;
+    --code-bg: #12141e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
 
-This is my personal collection of Java projects I built while learning backend development.
-It covers everything from basic DSA and core Java all the way to Spring Boot, Hibernate, Docker, and Spring AI.
-Each folder is a separate project — some are just plain Java files, some are full Maven projects.
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a1d27 0%, #12141e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(108,99,255,.15), transparent);
+    pointer-events: none;
+  }
+  .hero h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; letter-spacing: -1px; }
+  .hero h1 span { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { color: var(--muted); margin-top: 12px; font-size: 1.05rem; max-width: 560px; margin-inline: auto; }
+  .hero-stats { display: flex; justify-content: center; gap: 32px; margin-top: 32px; flex-wrap: wrap; }
+  .stat { text-align: center; }
+  .stat-num { font-size: 1.8rem; font-weight: 700; color: var(--accent2); }
+  .stat-label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
 
----
-D:\c++ codeing'\python\intelijji project study\projects.html
+  /* Filter bar */
+  .filter-bar { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; padding: 28px 24px 0; }
+  .filter-btn {
+    padding: 7px 18px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--muted); cursor: pointer; font-size: .85rem;
+    transition: all .2s;
+  }
+  .filter-btn:hover, .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-## What's Inside
+  /* Grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; padding: 28px 24px 60px; max-width: 1400px; margin: 0 auto; }
 
-1. [DSA Practice](#1-dsa-practice)
-2. [Java Practice](#2-java-practice)
-3. [Hibernate](#3-hibernate)
-4. [Spring1 — Core Spring](#4-spring1--core-spring)
-5. [ServletEx — Embedded Tomcat](#5-servletex--embedded-tomcat)
-6. [SpringBootWeb1](#6-springbootweb1)
-7. [SpringStarter — Spring Boot DI](#7-springstarter--spring-boot-di)
-8. [JobApp — Spring Boot MVC + JSP](#8-jobapp--spring-boot-mvc--jsp)
-9. [Spring REST with DB — PostgreSQL](#9-spring-rest-with-db--postgresql)
-10. [OAuth2 — GitHub and Google Login](#10-oauth2--github-and-google-login)
-11. [Docker Volumes](#11-docker-volumes)
-12. [Running Multiple Containers](#12-running-multiple-containers)
-13. [Spring AI — OpenAI Chat](#13-spring-ai--openai-chat)
-14. [SpringEcomAI — AI + Vector Store](#14-springecomai--ai--vector-store)
-15. [Ecom Frontend — React + Vite](#15-ecom-frontend--react--vite)
+  /* Card */
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    display: flex; flex-direction: column; transition: transform .2s, border-color .2s, box-shadow .2s;
+    overflow: hidden;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 8px 32px rgba(108,99,255,.15); }
+  .card-header { padding: 20px 20px 14px; display: flex; align-items: flex-start; gap: 14px; }
+  .card-icon {
+    width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .card-meta { flex: 1; min-width: 0; }
+  .card-num { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+  .card-title { font-size: 1.05rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-body { padding: 0 20px 16px; flex: 1; }
+  .card-desc { font-size: .88rem; color: var(--muted); line-height: 1.6; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag {
+    padding: 3px 10px; border-radius: 12px; font-size: .75rem; font-weight: 500;
+    background: var(--tag-bg); color: var(--accent2); border: 1px solid rgba(0,212,170,.15);
+  }
+  .tag.java { color: #f89820; border-color: rgba(248,152,32,.2); background: rgba(248,152,32,.08); }
+  .tag.spring { color: #6db33f; border-color: rgba(109,179,63,.2); background: rgba(109,179,63,.08); }
+  .tag.docker { color: #2496ed; border-color: rgba(36,150,237,.2); background: rgba(36,150,237,.08); }
+  .tag.react { color: #61dafb; border-color: rgba(97,218,251,.2); background: rgba(97,218,251,.08); }
+  .tag.ai { color: #a78bfa; border-color: rgba(167,139,250,.2); background: rgba(167,139,250,.08); }
+  .tag.db { color: #f472b6; border-color: rgba(244,114,182,.2); background: rgba(244,114,182,.08); }
 
----
+  /* Command section */
+  .card-footer { padding: 14px 20px 18px; border-top: 1px solid var(--border); }
+  .cmd-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .cmd-block {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 14px; font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: .8rem;
+    color: var(--accent2); position: relative; overflow-x: auto; white-space: pre;
+  }
+  .copy-btn {
+    position: absolute; top: 6px; right: 8px; background: var(--border); border: none;
+    color: var(--muted); border-radius: 5px; padding: 2px 8px; font-size: .7rem; cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .copy-btn:hover { background: var(--accent); color: #fff; }
 
-## Things you need before starting
+  /* Port badge */
+  .port-badge {
+    display: inline-flex; align-items: center; gap: 4px; font-size: .75rem;
+    background: rgba(108,99,255,.12); color: var(--accent); border: 1px solid rgba(108,99,255,.25);
+    border-radius: 8px; padding: 2px 9px; margin-top: 10px;
+  }
 
-Make sure you have these installed on your machine before running any project:
+  /* Prereq section */
+  .prereq { padding: 10px 20px 0; }
+  .prereq-title { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .prereq-list { display: flex; flex-wrap: wrap; gap: 5px; }
+  .prereq-item {
+    font-size: .75rem; padding: 2px 9px; border-radius: 8px;
+    background: rgba(255,255,255,.04); border: 1px solid var(--border); color: var(--muted);
+  }
 
-- **Java JDK** — 21 or 25 depending on the project
-- **Maven** — 3.8 or above
-- **IntelliJ IDEA** — any recent version works
-- **PostgreSQL** — needed for Hibernate, REST DB, Docker projects
-- **Docker Desktop** — needed for the Docker projects
-- **Node.js + npm** — version 18 or above, needed for the React frontend
+  /* Responsive */
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; padding: 16px; } }
+</style>
+</head>
+<body>
 
----
+<div class="hero">
+  <h1>My <span>Java Learning</span> Projects</h1>
+  <p>From DSA basics to Spring AI — a full backend learning journey in one place.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">15</div><div class="stat-label">Projects</div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Technologies</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Java Versions</div></div>
+  </div>
+</div>
 
-## 1. DSA Practice
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all', this)">All</button>
+  <button class="filter-btn" onclick="filter('java', this)">Java</button>
+  <button class="filter-btn" onclick="filter('spring', this)">Spring</button>
+  <button class="filter-btn" onclick="filter('docker', this)">Docker</button>
+  <button class="filter-btn" onclick="filter('ai', this)">AI</button>
+  <button class="filter-btn" onclick="filter('react', this)">React</button>
+  <button class="filter-btn" onclick="filter('db', this)">Database</button>
+</div>
 
-**Folder:** `DSA practice/dsa/`
+<div class="grid" id="grid"></div>
 
-These are just plain Java files, no Maven or anything. I wrote these while practicing binary search, bubble sort, and selection sort.
+<script>
+const projects = [
+  {
+    num: "01", icon: "🔍", color: "#f89820",
+    title: "DSA Practice",
+    folder: "DSA practice/dsa/",
+    desc: "Plain Java files for binary search, bubble sort, and selection sort. No build tool needed.",
+    tags: ["java"],
+    cmd: "javac binarysearch.java && java Main",
+    prereqs: ["Java JDK"],
+  },
+  {
+    num: "02", icon: "☕", color: "#f89820",
+    title: "Java Practice",
+    folder: "java practice/java/",
+    desc: "Core Java topics — lambdas, streams, threads, collections, exceptions, and more.",
+    tags: ["java"],
+    cmd: "javac lambda.java && java lambda",
+    prereqs: ["Java JDK"],
+  },
+  {
+    num: "03", icon: "🗄️", color: "#f472b6",
+    title: "Hibernate",
+    folder: "hibernate/",
+    desc: "Map Java classes to DB tables and save/fetch data without writing SQL. Uses OneToOne relationship between Alien and Laptop.",
+    tags: ["java", "db"],
+    cmd: 'cd hibernate\nmvn exec:java -Dexec.mainClass="com.hib.Main"',
+    prereqs: ["Java 25", "Maven", "PostgreSQL"],
+    port: null,
+    note: "DB: courseman | hbm2ddl: create (drops on restart)"
+  },
+  {
+    num: "04", icon: "🌱", color: "#6db33f",
+    title: "Spring1 — Core Spring",
+    folder: "Spring1/",
+    desc: "Plain Spring IoC container with AnnotationConfigApplicationContext. No Spring Boot.",
+    tags: ["spring"],
+    cmd: 'cd Spring1\nmvn exec:java -Dexec.mainClass="org.exam.App"',
+    prereqs: ["Java 17+", "Maven"],
+  },
+  {
+    num: "05", icon: "🐱", color: "#f89820",
+    title: "ServletEx — Embedded Tomcat",
+    folder: "ServletEx/",
+    desc: "Starts an embedded Tomcat server programmatically. No external Tomcat needed.",
+    tags: ["java", "spring"],
+    cmd: 'cd ServletEx\nmvn exec:java -Dexec.mainClass="org.exa.App"',
+    prereqs: ["Java 17+", "Maven"],
+    port: "8081",
+    url: "http://localhost:8081/hello"
+  },
+  {
+    num: "06", icon: "🚀", color: "#6db33f",
+    title: "SpringBootWeb1",
+    folder: "SpringBootWeb1/SpringBootWeb1/",
+    desc: "Basic Spring Boot web project to understand how auto-configuration works.",
+    tags: ["spring"],
+    cmd: "cd SpringBootWeb1/SpringBootWeb1\nmvn spring-boot:run",
+    prereqs: ["Java 17+", "Maven"],
+  },
+  {
+    num: "07", icon: "💉", color: "#6db33f",
+    title: "SpringStarter — DI",
+    folder: "SpringStarter/SpringStarter/",
+    desc: "@Component and @Autowired practice. Spring auto-creates Alien and Laptop beans and injects Laptop into Alien.",
+    tags: ["spring"],
+    cmd: "cd SpringStarter/SpringStarter\nmvn spring-boot:run",
+    prereqs: ["Java 25", "Maven"],
+    note: "Spring Boot 4.0.1"
+  },
+  {
+    num: "08", icon: "💼", color: "#6db33f",
+    title: "JobApp — MVC + JSP",
+    folder: "7 JobApp-Project/",
+    desc: "Full MVC web app with JSP pages. Add job posts and view them in the browser. In-memory storage.",
+    tags: ["spring"],
+    cmd: 'cd "7 JobApp-Project"\nmvn spring-boot:run',
+    prereqs: ["Java 21", "Maven"],
+    port: "8080",
+    url: "http://localhost:8080/"
+  },
+  {
+    num: "09", icon: "🔌", color: "#f472b6",
+    title: "Spring REST + PostgreSQL",
+    folder: "Le-320-Spring Project with DB/spring-boot-rest/",
+    desc: "REST API with Spring Data JPA connected to PostgreSQL. Full CRUD endpoints with keyword search.",
+    tags: ["spring", "db"],
+    cmd: 'cd "Le-320-Spring Project with DB/spring-boot-rest"\nmvn spring-boot:run',
+    prereqs: ["Java 21", "Maven", "PostgreSQL"],
+    port: "5000",
+    url: "http://localhost:5000/jobPosts",
+    note: "DB: telusko | Spring Boot 3.2.1"
+  },
+  {
+    num: "10", icon: "🔐", color: "#a78bfa",
+    title: "OAuth2 — GitHub & Google",
+    folder: "OAuth2/",
+    desc: "OAuth2 login with GitHub and Google. Hitting /hello redirects to login first.",
+    tags: ["spring"],
+    cmd: "cd OAuth2\nmvn spring-boot:run",
+    prereqs: ["Java 21", "Maven", "OAuth2 credentials"],
+    port: "8080",
+    url: "http://localhost:8080/hello",
+    note: "Spring Boot 3.2.4 — add client-id & secret in application.properties"
+  },
+  {
+    num: "11", icon: "🐳", color: "#2496ed",
+    title: "Docker Volumes",
+    folder: "Docker_Volumes/student-app/",
+    desc: "Spring Boot + PostgreSQL via Docker Compose. Data persists in a Docker volume even after containers stop.",
+    tags: ["docker", "db"],
+    cmd: "cd Docker_Volumes/student-app\nmvn clean package -DskipTests\ndocker-compose up --build",
+    prereqs: ["Docker Desktop", "Maven"],
+    port: "8090",
+    url: "http://localhost:8090"
+  },
+  {
+    num: "12", icon: "📦", color: "#2496ed",
+    title: "Multiple Containers",
+    folder: "Running_Multiple_Containers/student-app/",
+    desc: "Same as Docker Volumes but without persistence. Data is lost when containers stop. Good for understanding basics.",
+    tags: ["docker"],
+    cmd: "cd Running_Multiple_Containers/student-app\nmvn clean package -DskipTests\ndocker-compose up --build",
+    prereqs: ["Docker Desktop", "Maven"],
+    port: "8090",
+    url: "http://localhost:8090"
+  },
+  {
+    num: "13", icon: "🤖", color: "#a78bfa",
+    title: "Spring AI — OpenAI Chat",
+    folder: "springai/demo/demo/",
+    desc: "Connects to OpenAI and returns AI responses. Send a message via URL and get plain text back.",
+    tags: ["spring", "ai"],
+    cmd: "cd springai/demo/demo\nmvn spring-boot:run",
+    prereqs: ["Java", "Maven", "OpenAI API key"],
+    port: "8081",
+    url: "http://localhost:8081/api/Hello how are you",
+    note: "Add spring.ai.openai.api-key in application.properties"
+  },
+  {
+    num: "14", icon: "🛒", color: "#a78bfa",
+    title: "SpringEcomAI — Vector Store",
+    folder: "SpringAICode_Le_Add Order in the Vector Store/SpringEcomAI/",
+    desc: "E-commerce backend with AI chatbot using pgvector + RAG. Answers product questions by searching embeddings.",
+    tags: ["spring", "ai", "db", "docker"],
+    cmd: 'cd "SpringAICode_Le_Add Order in the Vector Store/SpringEcomAI"\ndocker-compose up -d\nmvn spring-boot:run',
+    prereqs: ["Java", "Maven", "Docker Desktop", "OpenAI API key"],
+    note: "Uses GPT-4o + pgvector. Start Docker first."
+  },
+  {
+    num: "15", icon: "⚛️", color: "#61dafb",
+    title: "Ecom Frontend — React + Vite",
+    folder: "ecom-frontend-1-main/ecom-frontend-1-main/",
+    desc: "React frontend for the e-commerce app. Product list and add product pages. Connects to Spring Boot via Axios.",
+    tags: ["react"],
+    cmd: "cd ecom-frontend-1-main/ecom-frontend-1-main\nnpm install\nnpm run dev",
+    prereqs: ["Node.js 18+", "npm"],
+    port: "5173",
+    url: "http://localhost:5173",
+    note: "Start Spring Boot backend first"
+  },
+];
 
-### How to run
+function tagClass(t) {
+  const map = { java:'java', spring:'spring', docker:'docker', react:'react', ai:'ai', db:'db' };
+  return map[t] || '';
+}
 
-You can just open the file in IntelliJ and hit the Run button. Or if you want to do it from terminal:
+function buildCard(p) {
+  const tagsHtml = p.tags.map(t => `<span class="tag ${tagClass(t)}">${t}</span>`).join('');
+  const prereqHtml = p.prereqs ? `
+    <div class="prereq">
+      <div class="prereq-title">Requires</div>
+      <div class="prereq-list">${p.prereqs.map(r => `<span class="prereq-item">${r}</span>`).join('')}</div>
+    </div>` : '';
+  const portHtml = p.port ? `<div class="port-badge">🌐 localhost:${p.port}</div>` : '';
+  const noteHtml = p.note ? `<div style="font-size:.75rem;color:#8892a4;margin-top:8px;font-style:italic">${p.note}</div>` : '';
+  const urlHtml = p.url ? `<div style="font-size:.75rem;margin-top:6px;color:#6c63ff">→ <a href="${p.url}" target="_blank" style="color:#6c63ff;text-decoration:none">${p.url}</a></div>` : '';
 
-```bash
-cd "DSA practice/dsa"
+  return `
+  <div class="card" data-tags="${p.tags.join(' ')}">
+    <div class="card-header">
+      <div class="card-icon" style="background:${p.color}18;border:1px solid ${p.color}30">${p.icon}</div>
+      <div class="card-meta">
+        <div class="card-num">Project ${p.num}</div>
+        <div class="card-title">${p.title}</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-desc">${p.desc}</div>
+      <div class="tags" style="margin-top:10px">${tagsHtml}</div>
+      ${portHtml}${urlHtml}${noteHtml}
+    </div>
+    ${prereqHtml}
+    <div class="card-footer">
+      <div class="cmd-label">Run Command</div>
+      <div class="cmd-block" id="cmd-${p.num}">${p.cmd}<button class="copy-btn" onclick="copy('cmd-${p.num}', this)">copy</button></div>
+    </div>
+  </div>`;
+}
 
-# binary search
-javac binarysearch.java
-java Main
+document.getElementById('grid').innerHTML = projects.map(buildCard).join('');
 
-# bubble sort
-javac bubblesort.java
-java main
+function filter(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(card => {
+    card.style.display = (tag === 'all' || card.dataset.tags.includes(tag)) ? '' : 'none';
+  });
+}
 
-# selection sort
-javac selection.java
-java main
+function copy(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText.replace('copy','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓';
+    setTimeout(() => btn.textContent = 'copy', 1500);
+  });
+}
+</script>
+</body>
+</html>
 ```
-
----
-
-## 2. Java Practice
-
-**Folder:** `java practice/java/`
-
-Again, plain Java files — no build tool needed. I used this folder to practice all the core Java topics like lambdas, streams, threads, collections, exceptions, etc.
-
-### How to run
-
-Open any file in IntelliJ and click Run. Or from terminal:
-
-```bash
-cd "java practice/java"
-
-javac lambda.java       && java lambda
-javac Demo.java         && java Demo
-javac collection.java   && java collection
-javac stream3.java      && java stream3
-javac strem1.java       && java strem1
-javac stream2.java      && java stream2
-javac stremapi.java     && java stremapi
-javac methodref.java    && java methodref
-javac optional.java     && java option
-javac thread.java       && java thread
-javac race.java         && java race
-javac excetion.java     && java excetion
-javac exceptionthrow.java && java exceptionthrow
-javac tryfinally.java   && java tryfinally
-javac buffer.java       && java buffer
-javac comparator.java   && java comparator
-```
-
-> Note: for optional.java the class name is `option` not `optional`, so run `java option`
-
----
-
-## 3. Hibernate
-
-**Folder:** `hibernate/`  
-**Java:** 25  
-**DB:** PostgreSQL
-
-This is a Maven project where I learned how Hibernate works — how to map Java classes to DB tables and save/fetch data without writing SQL manually.
-
-### Before you run
-
-1. Start PostgreSQL on your machine (port 5432)
-2. Create the database:
-   ```sql
-   CREATE DATABASE courseman;
-   ```
-3. Open `src/main/resources/hibernate.cfg.xml` and put your PostgreSQL password:
-   ```xml
-   <property name="hibernate.connection.username">postgres</property>
-   <property name="hibernate.connection.password">your_password</property>
-   ```
-
-> One thing to know — `hbm2ddl.auto` is set to `create` which means every time you run it, it drops and recreates the tables. So don't worry if old data disappears.
-
-### Run it
-
-```bash
-cd hibernate
-mvn compile
-mvn exec:java -Dexec.mainClass="com.hib.Main"
-```
-
-Or just open `Main.java` in IntelliJ and right-click → Run.
-
-It will create an Alien and a Laptop in the DB, then fetch the Alien back and print it.
-
----
-
-## 4. Spring1 — Core Spring
-
-**Folder:** `Spring1/`  
-**Java:** 17+
-
-This is where I first learned Spring without Spring Boot. Just plain Spring IoC container with `AnnotationConfigApplicationContext`.
-
-### Run it
-
-```bash
-cd Spring1
-mvn compile
-mvn exec:java -Dexec.mainClass="org.exam.App"
-```
-
-Or open `App.java` → right-click → Run in IntelliJ.
-
----
-
-## 5. ServletEx — Embedded Tomcat
-
-**Folder:** `ServletEx/`  
-**Java:** 17+
-
-I wanted to understand how Tomcat works under the hood, so I wrote this project that starts an embedded Tomcat server programmatically — no external Tomcat needed.
-
-### Run it
-
-```bash
-cd ServletEx
-mvn compile
-mvn exec:java -Dexec.mainClass="org.exa.App"
-```
-
-Or open `App.java` → right-click → Run.
-
-Once it starts, open your browser and go to:
-```
-http://localhost:8081/hello
-```
-You should see **Hello World** on the page.
-
----
-
-## 6. SpringBootWeb1
-
-**Folder:** `SpringBootWeb1/SpringBootWeb1/`  
-**Java:** 17+
-
-A basic Spring Boot web project, mostly just to understand how Spring Boot auto-configures everything.
-
-### Run it
-
-```bash
-cd SpringBootWeb1/SpringBootWeb1
-mvn spring-boot:run
-```
-
-Or open `SpringBootWeb1Application.java` in IntelliJ and click Run.
-
----
-
-## 7. SpringStarter — Spring Boot DI
-
-**Folder:** `SpringStarter/SpringStarter/`  
-**Java:** 25  
-**Spring Boot:** 4.0.1
-
-This is where I practiced `@Component` and `@Autowired`. Spring automatically creates the `Alien` and `Laptop` beans and injects `Laptop` into `Alien` — no need to use `new` keyword manually.
-
-### Run it
-
-```bash
-cd SpringStarter/SpringStarter
-mvn spring-boot:run
-```
-
-Or open `SpringStarterApplication.java` → click Run.
-
-When it runs, it calls `alien.code()` which internally calls `laptop.compile()` — you'll see the output in the console.
-
----
-
-## 8. JobApp — Spring Boot MVC + JSP
-
-**Folder:** `7 JobApp-Project/`  
-**Java:** 21  
-**Spring Boot:** 3.2.0
-
-A full MVC web app with JSP pages. You can add job posts and view them in the browser. Data is stored in memory so it resets when you restart.
-
-### Run it
-
-```bash
-cd "7 JobApp-Project"
-mvn spring-boot:run
-```
-
-Or open `JobAppApplication.java` → click Run.
-
-### Pages you can visit
-
-| URL | What it does |
-|---|---|
-| `http://localhost:8080/` | Home page |
-| `http://localhost:8080/addjob` | Form to add a new job |
-| `http://localhost:8080/viewalljobs` | See all added jobs |
-
----
-
-## 9. Spring REST with DB — PostgreSQL
-
-**Folder:** `Le-320-Spring Project with DB/spring-boot-rest/`  
-**Java:** 21  
-**Spring Boot:** 3.2.1  
-**Port:** 5000
-
-This is a REST API connected to a real PostgreSQL database. I used this to learn Spring Data JPA and how to build proper CRUD endpoints.
-
-### Before you run
-
-1. Start PostgreSQL on port 5432
-2. Create the database:
-   ```sql
-   CREATE DATABASE telusko;
-   ```
-3. Open `src/main/resources/application.properties` and update your password:
-   ```properties
-   spring.datasource.username=postgres
-   spring.datasource.password=your_password
-   ```
-
-### Run it
-
-```bash
-cd "Le-320-Spring Project with DB/spring-boot-rest"
-mvn spring-boot:run
-```
-
-### API endpoints you can test (use Postman or browser)
-
-| Method | URL | What it does |
-|---|---|---|
-| GET | `http://localhost:5000/jobPosts` | Get all jobs |
-| GET | `http://localhost:5000/jobPost/{id}` | Get one job by ID |
-| GET | `http://localhost:5000/jobPosts/keyword/{word}` | Search jobs by keyword |
-| POST | `http://localhost:5000/jobPost` | Add a new job |
-| PUT | `http://localhost:5000/jobPost` | Update a job |
-| DELETE | `http://localhost:5000/jobPost/{id}` | Delete a job |
-| GET | `http://localhost:5000/load` | Load some sample data |
-
----
-
-## 10. OAuth2 — GitHub and Google Login
-
-**Folder:** `OAuth2/`  
-**Java:** 21  
-**Spring Boot:** 3.2.4
-
-This project adds OAuth2 login using GitHub and Google. When you hit the `/hello` endpoint, it redirects you to login first.
-
-### Before you run
-
-You need to put your own OAuth2 credentials in `src/main/resources/application.properties`.
-
-**For GitHub:**
-1. Go to https://github.com/settings/developers → New OAuth App
-2. Set the callback URL to `http://localhost:8080/login/oauth2/code/github`
-3. Copy your Client ID and Secret here:
-   ```properties
-   spring.security.oauth2.client.registration.github.client-id=YOUR_CLIENT_ID
-   spring.security.oauth2.client.registration.github.client-secret=YOUR_CLIENT_SECRET
-   ```
-
-**For Google:**
-1. Go to https://console.cloud.google.com → Credentials → OAuth 2.0 Client IDs
-2. Set the callback URL to `http://localhost:8080/login/oauth2/code/google`
-3. Copy your credentials here:
-   ```properties
-   spring.security.oauth2.client.registration.google.client-id=YOUR_CLIENT_ID
-   spring.security.oauth2.client.registration.google.client-secret=YOUR_CLIENT_SECRET
-   ```
-
-### Run it
-
-```bash
-cd OAuth2
-mvn spring-boot:run
-```
-
-Then open:
-```
-http://localhost:8080/hello
-```
-It will redirect you to GitHub or Google login. After you log in, it returns `Welcome to Telusko`.
-
----
-
-## 11. Docker Volumes
-
-**Folder:** `Docker_Volumes/student-app/`  
-**Port:** 8090
-
-This project runs the Spring Boot student app and PostgreSQL together using Docker Compose. The important thing here is that PostgreSQL data is saved in a Docker volume — so even if you stop the containers, your data stays.
-
-### Before you run
-
-Make sure Docker Desktop is running.
-
-### Run it
-
-```bash
-cd Docker_Volumes/student-app
-
-# first build the jar
-mvn clean package -DskipTests
-
-# then start both containers
-docker-compose up --build
-```
-
-Open `http://localhost:8090` in your browser.
-
-### To stop
-
-```bash
-docker-compose down
-```
-
-### To stop AND delete all saved data
-
-```bash
-docker-compose down -v
-```
-
----
-
-## 12. Running Multiple Containers
-
-**Folder:** `Running_Multiple_Containers/student-app/`  
-**Port:** 8090
-
-Same as the Docker Volumes project but without the volume. So when you stop the containers, all PostgreSQL data is gone. I made this first to understand the basics, then added volumes in the project above.
-
-### Run it
-
-```bash
-cd Running_Multiple_Containers/student-app
-
-mvn clean package -DskipTests
-docker-compose up --build
-```
-
-Open `http://localhost:8090`.
-
-### To stop
-
-```bash
-docker-compose down
-```
-
----
-
-## 13. Spring AI — OpenAI Chat
-
-**Folder:** `springai/demo/demo/`  
-**Port:** 8081
-
-A simple Spring Boot project that connects to OpenAI and lets you send a message and get a response back. I used this to learn how Spring AI works.
-
-### Before you run
-
-Open `src/main/resources/application.properties` and put your OpenAI API key:
-```properties
-spring.ai.openai.api-key=YOUR_OPENAI_API_KEY
-```
-Get your key from https://platform.openai.com/api-keys
-
-### Run it
-
-```bash
-cd springai/demo/demo
-mvn spring-boot:run
-```
-
-### Test it
-
-Just open this in your browser (replace the message with anything you want):
-```
-http://localhost:8081/api/Hello how are you
-```
-It will return the AI response as plain text.
-
----
-
-## 14. SpringEcomAI — AI + Vector Store
-
-**Folder:** `SpringAICode_Le_Add Order in the Vector Store/SpringEcomAI/`
-
-This is the most advanced project. It's a full e-commerce backend with an AI chatbot that can answer questions about products. It uses pgvector (PostgreSQL extension) to store product embeddings and does RAG (Retrieval-Augmented Generation) to give smart answers.
-
-### Before you run
-
-1. Put your OpenAI API key in `src/main/resources/application.properties`:
-   ```properties
-   spring.ai.openai.api-key=YOUR_OPENAI_API_KEY
-   ```
-
-2. Start the pgvector database with Docker (do this first):
-   ```bash
-   cd "SpringAICode_Le_Add Order in the Vector Store/SpringEcomAI"
-   docker-compose up -d
-   ```
-
-### Run it
-
-```bash
-mvn spring-boot:run
-```
-
-The AI uses GPT-4o and can answer questions about your products by searching through the vector store.
-
----
-
-## 15. Ecom Frontend — React + Vite
-
-**Folder:** `ecom-frontend-1-main/ecom-frontend-1-main/`  
-**Node:** 18+
-
-This is the React frontend for the e-commerce app. It connects to the Spring Boot backend using Axios. Has a product list page and an add product page.
-
-> Make sure the Spring Boot backend is running before you open this.
-
-### Run it
-
-```bash
-cd ecom-frontend-1-main/ecom-frontend-1-main
-
-# install packages first (only needed once)
-npm install
-
-# start the dev server
-npm run dev
-```
-
-Open `http://localhost:5173` in your browser.
-
-### Build for production
-
-```bash
-npm run build
-```
-
----
-
-## Quick cheat sheet
-
-If you just want to quickly run something, here's the one-liner for each project:
-
-| Project | Command |
-|---|---|
-| DSA Practice | `javac binarysearch.java && java Main` |
-| Java Practice | `javac lambda.java && java lambda` |
-| Hibernate | `mvn exec:java -Dexec.mainClass="com.hib.Main"` |
-| Spring1 | `mvn exec:java -Dexec.mainClass="org.exam.App"` |
-| ServletEx | `mvn exec:java -Dexec.mainClass="org.exa.App"` |
-| SpringBootWeb1 | `mvn spring-boot:run` |
-| SpringStarter | `mvn spring-boot:run` |
-| JobApp | `mvn spring-boot:run` |
-| Spring REST + DB | `mvn spring-boot:run` |
-| OAuth2 | `mvn spring-boot:run` |
-| Docker Volumes | `docker-compose up --build` |
-| Multiple Containers | `docker-compose up --build` |
-| SpringAI | `mvn spring-boot:run` |
-| SpringEcomAI | `docker-compose up -d` then `mvn spring-boot:run` |
-| Ecom Frontend | `npm install && npm run dev` |
-#   m y s p r i n g s t u d y 
- 
- 
